@@ -10,7 +10,7 @@ module Yabeda
     # See https://docs.datadoghq.com/api/?lang=ruby#get-list-of-active-metrics
     class Adapter < BaseAdapter
       def registry
-        @registry ||= Dogapi::Client.new(ENV["DD_API_KEY"])
+        @registry = Dogapi::Client.new(ENV["DD_API_KEY"])
       end
 
       def register_counter!(_metric)
@@ -18,7 +18,7 @@ module Yabeda
       end
 
       def perform_counter_increment!(counter, tags, increment)
-        registry.emit_points(build_name(counter), [[Time.now, increment]], type: 'counter', tags: build_tags(tags))
+        registry.emit_point(build_name(counter), increment, type: 'counter', tags: build_tags(tags))
       end
 
       def register_gauge!(_metric)
@@ -26,7 +26,7 @@ module Yabeda
       end
 
       def perform_gauge_set!(metric, tags, value)
-        registry.emit_points(build_name(metric), [[Time.now, value]], type: 'gauge', tags: build_tags(tags))
+        registry.emit_point(build_name(metric), value, type: 'gauge', tags: build_tags(tags))
       end
 
       def register_histogram!(_metric)
