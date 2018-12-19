@@ -9,7 +9,7 @@ Adapter for easy exporting your collected metrics from your application to the [
  2. Add this line to your application's Gemfile:
 
     ```ruby
-    gem 'yabeda-datadog'
+    gem 'yabeda-datadog', :git => "git@github.com:Neyaz/yabeda-datadog.git"
     ```
 
     And then execute:
