@@ -16,7 +16,7 @@ Adapter for easy exporting your collected metrics from your application to the [
 
         $ bundle
   3. Export envoirment variable
-    ```bash
+    ```
     export DD_API_KEY=YOUR_KEY
     ```      
 
