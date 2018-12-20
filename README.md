@@ -20,7 +20,7 @@ Adapter for easy exporting your collected metrics from your application to the [
     export DD_API_KEY=YOUR_KEY
     ``` 
   4. Export period for collect block execution in system variables
-     ```
+    ```
     export DATADOG_COLLECT_PERIOD=PERIOD
     ```   
     For expemple: 3s, 3h, 3h30m
