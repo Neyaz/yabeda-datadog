@@ -23,9 +23,8 @@ Adapter for easy exporting your collected metrics from your application to the [
     ```
     export DATADOG_COLLECT_PERIOD=PERIOD
     ```   
-    For expemple: 3s, 3h, 3h30m
-    
-    For more information follow [rufus-sheduler](https://github.com/jmettraux/rufus-scheduler)
+    For more information follow 
+    [rufus-sheduler](https://github.com/jmettraux/rufus-scheduler)
   5. Run sheduler
     ```ruby
     Yabeda::DataDog::Collector.start_collect!
