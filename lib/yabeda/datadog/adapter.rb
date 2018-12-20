@@ -2,7 +2,7 @@
 
 require "dogapi"
 require "yabeda/base_adapter"
-require 'yaml'
+require "yaml"
 
 module Yabeda
   module DataDog
@@ -10,7 +10,7 @@ module Yabeda
     # See https://docs.datadoghq.com/api/?lang=ruby#get-list-of-active-metrics
     class Adapter < BaseAdapter
       def registry
-        @registry = Dogapi::Client.new(ENV["DD_API_KEY"])
+        @registry = Dogapi::Client.new(ENV['DD_API_KEY'])
       end
 
       def register_counter!(_metric)
@@ -41,7 +41,7 @@ module Yabeda
 
       def build_name(metric)
         name = metric.name.to_s
-        [metric.group&.capitalize, name].compact.join(".")
+        [metric.group&.capitalize, name].compact.join('.')
       end
 
       # Convert {key: value} to ["key: value"]
