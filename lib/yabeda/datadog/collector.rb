@@ -8,7 +8,7 @@ module Yabeda
       class << self
         def start_collect!
           scheduler = Rufus::Scheduler.singleton
-          scheduler.every ENV['DATADOG_COLLECT_PERIOD'] do
+          scheduler.every ENV['DATADOG_COLLECT_PERIOD'] || '15s' do
             begin
               Yabeda.collectors.each(&:call)
             rescue => e
