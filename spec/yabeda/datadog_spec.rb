@@ -6,7 +6,7 @@ RSpec.describe Yabeda::DataDog do
   end
 
   describe "DataDog API interaction" do
-    let(:dogapi_client) { instance_double("Dogapi::Client") }
+    let(:dogapi_client) { instance_double("Datadog::Statsd") }
     let!(:counter)   { Yabeda.counter(:gate_opens) }
     let!(:gauge)     { Yabeda.gauge(:water_level) }
     let!(:histogram) do
@@ -14,25 +14,26 @@ RSpec.describe Yabeda::DataDog do
     end
 
     before do
-      allow(dogapi_client).to receive(:emit_point)
-      allow(dogapi_client).to receive(:emit_points)
-      allow(Dogapi::Client).to receive(:new).and_return(dogapi_client)
+      allow(dogapi_client).to receive(:increment)
+      allow(dogapi_client).to receive(:gauge)
+      allow(dogapi_client).to receive(:histogram)
+      allow(Datadog::Statsd).to receive(:new).and_return(dogapi_client)
       allow(Time).to receive(:now)
     end
 
     it "calls increment_metric on counter increment" do
       Yabeda.gate_opens.increment(gate: :fake)
-      expect(dogapi_client).to have_received(:emit_point).with("gate_opens", 1, tags: ["gate: fake"], type: "counter")
+      expect(dogapi_client).to have_received(:increment).with("gate_opens", by: 1, tags: ["gate: fake"])
     end
 
     it "calls record_metric on gauge change" do
       Yabeda.water_level.set({}, 42)
-      expect(dogapi_client).to have_received(:emit_point).with("water_level", 42, tags: [], type: "gauge")
+      expect(dogapi_client).to have_received(:gauge).with("water_level", 42, tags: [])
     end
 
     it "calls record_metric on histogram measure" do
       Yabeda.gate_throughput.measure({ gate: 1 }, 4321)
-      expect(dogapi_client).to have_received(:emit_points).with("gate_throughput", [[Time.now, 4321]], tags: ["gate: 1"], type: "gauge")
+      expect(dogapi_client).to have_received(:histogram).with("gate_throughput", 4321, tags: ["gate: 1"])
     end
   end
 end

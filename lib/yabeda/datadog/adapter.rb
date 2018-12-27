@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "dogapi"
+require "datadog/statsd"
 require "yabeda/base_adapter"
 require "yaml"
 
@@ -10,7 +10,7 @@ module Yabeda
     # See https://docs.datadoghq.com/api/?lang=ruby#get-list-of-active-metrics
     class Adapter < BaseAdapter
       def registry
-        @registry = Dogapi::Client.new(ENV['DD_API_KEY'])
+        @registry = Datadog::Statsd.new('localhost', 8125)
       end
 
       def register_counter!(_metric)
@@ -18,7 +18,7 @@ module Yabeda
       end
 
       def perform_counter_increment!(counter, tags, increment)
-        registry.emit_point(build_name(counter), increment, type: 'counter', tags: build_tags(tags))
+        registry.increment(build_name(counter), by: increment, tags: build_tags(tags))
       end
 
       def register_gauge!(_metric)
@@ -26,7 +26,7 @@ module Yabeda
       end
 
       def perform_gauge_set!(metric, tags, value)
-        registry.emit_point(build_name(metric), value, type: 'gauge', tags: build_tags(tags))
+        registry.gauge(build_name(metric), value, tags: build_tags(tags))
       end
 
       def register_histogram!(_metric)
@@ -34,14 +34,9 @@ module Yabeda
       end
 
       def perform_histogram_measure!(metric, tags, value)
-        registry.emit_points(build_name(metric), [[Time.now, value]], type: 'gauge', tags: build_tags(tags))
+        registry.histogram(build_name(metric), value, tags: build_tags(tags))
       end
-
-      def initialize(*)
-        super
-        raise ApiKeyError, 'DataDog API key not set to envoirmental variable' if ENV['DD_API_KEY'].nil?
-      end
-
+      
       private
 
       def build_name(metric)

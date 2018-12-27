@@ -15,17 +15,13 @@ Adapter for easy exporting your collected metrics from your application to the [
     And then execute:
 
         $ bundle
-  3. Export DataDog API in system variables
-    ```
-    export DD_API_KEY=YOUR_KEY
-    ``` 
-  4. Export period for collect block execution in system variables
+  3. Export period for collect block execution in system variables
     ```
     export DATADOG_COLLECT_PERIOD=PERIOD
     ```   
     For more information follow 
     [rufus-sheduler](https://github.com/jmettraux/rufus-scheduler)
-  5. Run sheduler
+  4. Run sheduler
     ```ruby
     Yabeda::DataDog::Collector.start_collect!
     ```

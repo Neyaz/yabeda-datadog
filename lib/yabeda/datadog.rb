@@ -2,7 +2,6 @@
 
 require "yabeda"
 require "yabeda/datadog/version"
-require "yabeda/datadog/exceptions"
 require "yabeda/datadog/adapter"
 require "yabeda/datadog/collector"
 
