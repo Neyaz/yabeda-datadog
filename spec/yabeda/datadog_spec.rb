@@ -2,7 +2,6 @@
 
 RSpec.describe Yabeda::DataDog do
   it "has a version number" do
-    Yabeda::DataDog::Collector.start_collect!
     expect(Yabeda::DataDog::VERSION).not_to be nil
   end
 

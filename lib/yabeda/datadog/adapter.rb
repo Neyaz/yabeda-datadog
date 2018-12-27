@@ -47,11 +47,7 @@ module Yabeda
       # Convert {key: value} to ["key: value"]
       # https://docs.datadoghq.com/api/?lang=ruby#post-timeseries-points 
       def build_tags(tags)
-        tags_array = []
-        tags.each do |key, value|
-          tags_array << "#{key}: #{value}"
-        end
-        tags_array
+        tags.map{ |key, value| "#{key}: #{value}" }
       end
 
       Yabeda.register_adapter(:datadog, new)
