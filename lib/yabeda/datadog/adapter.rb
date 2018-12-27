@@ -37,6 +37,11 @@ module Yabeda
         registry.emit_points(build_name(metric), [[Time.now, value]], type: 'gauge', tags: build_tags(tags))
       end
 
+      def initialize(*)
+        super
+        raise ApiKeyError, 'DataDog API key not set to envoirmental variable' if ENV['DD_API_KEY'].nil?
+      end
+
       private
 
       def build_name(metric)
